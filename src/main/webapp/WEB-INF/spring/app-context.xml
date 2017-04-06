@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <description>DataSource, JPA, and Hibernate configuration</description>
+
+    <!-- Declare database connection pool dan JPA DataSource -->
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="minimumIdle" value="4"/>
+        <property name="maximumPoolSize" value="50"/>
+        <property name="connectionTimeout" value="50000"/>
+        <property name="idleTimeout" value="300000"/>
+        <property name="maxLifetime" value="600000"/>
+        <property name="validationTimeout" value="30000"/>
+        <property name="leakDetectionThreshold" value="30000"/>
+        <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource"/>
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="port">3306</prop>
+                <prop key="serverName">localhost</prop>
+                <prop key="user">root</prop>
+                <prop key="password">root</prop>
+                <prop key="databaseName">db_jpacrud</prop>
+                <prop key="prepStmtCacheSize">250</prop>
+                <prop key="cachePrepStmts">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="jdbcDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig"/>
+    </bean>
+
+    <!-- Declare SpringData-JPA configuration -->
+    <!-- <context:load-time-weaver/> [ optional, please google utk informasi detailnya ] -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="jdbcDataSource"/>
+        <property name="packagesToScan" value="com.teguh.jpa.crud.example.entity"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="true"/>
+                <property name="showSql" value="true"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+                <property name="database" value="MYSQL"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+                <prop key="hibernate.generate_statistics">true</prop>
+                <prop key="hibernate.max_fetch_depth">3</prop>
+                <prop key="hibernate.jdbc.fetch_size">100</prop>
+                <prop key="hibernate.jdbc.batch_size">10</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="dataSource" ref="jdbcDataSource"/>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+    </bean>
+
+    <!-- Declare JPA Entity message localization -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames" value="WEB-INF/i18n/messages"/>
+        <property name="fallbackToSystemLocale" value="false"/>
+    </bean>
+
+    <!-- Declare others -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <jpa:repositories base-package="com.teguh.jpa.crud.example.repository" transaction-manager-ref="transactionManager"/>
+    <jpa:auditing modify-on-creation="false"/>
+
+    <!-- Scan classpath for annotations, eg: @Component, @Service -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.teguh.jpa.crud.example.domain"/>
+
+</beans>

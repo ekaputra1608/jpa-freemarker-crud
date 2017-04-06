@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
+
+    <!-- Location of persistent caches on disk -->
+    <diskStore path="java.io.tmpdir/EhCacheStores"/>
+
+    <defaultCache eternal="false" maxEntriesLocalHeap="100000" timeToIdleSeconds="600" timeToLiveSeconds="1800"
+                  overflowToDisk="false" memoryStoreEvictionPolicy="LFU"/>
+
+    <cache name="com.teguh.jpa.crud.example.entity.Person" eternal="false" maxEntriesLocalHeap="1000"
+           timeToIdleSeconds="600" timeToLiveSeconds="3600"
+           overflowToDisk="false" memoryStoreEvictionPolicy="LFU"/>
+
+    <cache name="com.teguh.jpa.crud.example.entity.Department" eternal="false" maxEntriesLocalHeap="1000"
+           timeToIdleSeconds="600" timeToLiveSeconds="3600"
+           overflowToDisk="false" memoryStoreEvictionPolicy="LFU"/>
+
+    <cache name="org.hibernate.cache.internal.StandardQueryCache" eternal="false"
+           maxEntriesLocalHeap="50000" timeToIdleSeconds="600" timeToLiveSeconds="1800"
+           overflowToDisk="false" memoryStoreEvictionPolicy="LFU"/>
+
+    <cache name="org.hibernate.cache.spi.UpdateTimestampsCache" maxEntriesLocalHeap="10000"
+           eternal="true" memoryStoreEvictionPolicy="LFU">
+        <persistence strategy="localTempSwap"/>
+    </cache>
+
+</ehcache>

@@ -1,0 +1,86 @@
+// layout colors
+//-----------------------
+@brand-dark: #2F3440;
+@brand-darker: darken(@brand-dark, 5%);
+@brand-primary: lighten(#04518C, 5%);
+@brand-info: #0C8DB8;
+@brand-danger: #BF0404;
+@brand-warning: #FFAC00;
+@brand-success: #019875;
+
+@state-success-text: #346934;
+@state-success-bg: lighten(@state-success-text, 48.25%);
+@state-success-border: darken(spin(@state-success-bg, -10), 5%);
+
+@state-info-text: darken(spin(@brand-info, -10), 9%);
+@state-info-bg: lighten(@brand-info, 40%);
+@state-info-border: darken(spin(@state-info-bg, -10), 10%);
+
+@state-warning-text: darken(spin(@brand-warning, -10), 15%);
+@state-warning-bg: lighten(@brand-warning, 30%);
+@state-warning-border: darken(spin(@state-warning-bg, -10), 5%);
+
+@state-danger-text: darken(spin(@brand-danger, -10), 15%);
+@state-danger-bg: lighten(saturate(@brand-danger, 35%), 40%);
+@state-danger-border: darken(spin(@state-danger-bg, -10), 5%);
+
+@state-warning-text: darken(spin(@brand-warning, -10), 15%);
+@state-warning-bg: lighten(@brand-warning, 30%);
+@state-warning-border: darken(spin(@state-warning-bg, -10), 5%);
+
+@alert-warning-bg: @state-warning-bg;
+@alert-warning-text: @state-warning-text;
+@alert-warning-border: @state-warning-border;
+
+@table-header-bg: #f0f0f0;
+@table-bg-accent: #fafafa;
+@table-border-color: #ddd;
+@table-row-hover-start: #fdf8ab;
+@table-row-hover-end: #fffcdc;
+
+@chosen-background: @input-bg;
+@chosen-border: 1px solid @input-border;
+@chosen-border-radius: @input-border-radius;
+@chosen-multi-border-radius: @chosen-border-radius;
+@chosen-box-shadow: ~"inset 0 1px 1px rgba(0, 0, 0, .075)";
+@chosen-drop-border: @input-border;
+@chosen-drop-box-shadow: ~"0 8px 8px rgba(0, 0, 0, .25)";
+@chosen-drop-zindex: 1060;
+@chosen-focus-border: 1px solid @input-border-focus;
+@chosen-focus-box-shadow: ~"0 1px 1px rgba(0, 0, 0, .075) inset, 0 0 8px rgba(82, 168, 236, .6)";
+@chosen-focus-transition: ~"border linear .2s, box-shadow linear .2s";
+@chosen-height: @input-height-base;
+@chosen-multi-height: @input-height-base + 6px;
+@chosen-sprite-path: "../../assets/chosen-sprite.png";
+@chosen-sprite-retina-path: "../../assets/chosen-sprite@2x.png";
+
+// Mixins
+//-----------------------
+.disable-select() {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+#gradient {
+  // Vertical gradient, from top to bottom
+  //
+  // Creates two color stops, start and end, by specifying a color and position for each color stop.
+  // Color stops are not available in IE9 and below.
+  .vertical(@start-color: #555; @end-color: #333; @start-percent: 0%; @end-percent: 100%) {
+    background: @end-color;
+    background-image: svg-gradient(to bottom, @start-color @start-percent, @end-color @end-percent);
+    background-image: -moz-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(@start-percent, @start-color), color-stop(@end-percent, @end-color));
+    background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);
+    background-image: -o-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);
+    background-image: -ms-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);
+    background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent);
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient( startColorstr='%d', endColorstr='%d', GradientType=0 )", argb(@start-color), argb(@end-color))); // IE9 and down
+  }
+}
